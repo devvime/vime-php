@@ -1,0 +1,17 @@
+<?php if(isset($this->view->error)): ?>
+	<div id="alert">
+		<div class="box-alert container content anim-alert txt-center" style="background-color: #fff;">
+		    <!-- <a href="" id="close-alert" class="montserrat txt-fff txt-center">X</a> -->
+		    <form action="" method="POST">
+		    	<center><img src="/assets/img/error.svg" width="15%"></center>
+		    	<h1 class="montserrat" style="color: black;">
+		        	<?php foreach($this->view->error as $msg){
+		        		echo $msg;
+		        	} ?>
+		        </h1>
+		        <div class="separar-2"></div>
+		        <a href="" class="btn btn-red">Ok</a>
+		    </form>
+		</div>
+	</div>
+<?php endif; ?>
