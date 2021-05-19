@@ -56,4 +56,15 @@ abstract class BaseController
 			return $this->pageTitle;
 		}
 	}
+
+	protected function request($req)
+	{
+		$method = $_SERVER['REQUEST_METHOD'];
+
+		if($method == $req) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }

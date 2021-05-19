@@ -25,7 +25,7 @@ class RoutesController extends BaseController
 			"title"=>"VIME PHP",
 			"subtitle"=>"Micro Framework PHP (Simple Router)",
 			"content"=>"By: Victor Alves Mendes"
-		]);
+		]);		
 
 	}
 
