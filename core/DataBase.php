@@ -6,11 +6,11 @@ use PDO;
 
 class DataBase extends PDO
 {
-		const DATABASE = false;
-		private static $dbName = 'aula001';
-		private static $dbHost = 'localhost';
-		private static $dbUser = 'root';
-		private static $dbPass = '';
+		const DATABASE = USE_DB;		
+		private static $dbHost = DB_HOST;
+		private static $dbUser = DB_USER;
+		private static $dbPass = DB_PASS;
+		private static $dbName = DB_NAME;
 		private static $conn = null;
 	    
 	    public function __construct() 

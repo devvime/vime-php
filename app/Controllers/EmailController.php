@@ -34,17 +34,14 @@ class EmailController extends Email {
         ';
 
         try {
-
-            $this->mail->set('victor@estilodev.com.br', 'Victor'); // Qeum está enviando
+            $this->mail->set('victor@estilodev.com.br', 'Victor'); // Quem está enviando
             $this->mail->add('victor@estilodev.com.br', 'Victor'); // Quem vai receber
             $this->mail->content($subject,$body,$altbody);
             $this->mail->send(); // Dispara o email
             return true;
 
         } catch (Exception $e) {
-
             echo "Falha no erro!: {$this->mail->ErrorInfo}";
-
         }
     }
 

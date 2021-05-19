@@ -1,6 +1,6 @@
 <?php
 
-$route[] = ['/','HomeController@index'];
+$route[] = ['/','RoutesController@index'];
 $route[] = ['/sendmail','EmailController@index'];
 
 return $route;
