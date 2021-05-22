@@ -60,22 +60,14 @@ class BaseModel
 		return $result;
 	}
 
-	public function update($set,$request)
+	public function update($fields, $values, $condition = "")
 	{
-		$query = "UPDATE {$this->table} SET {$set} WHERE id = ?";
+		$set_values = implode(",",$values);
+		$get_values = explode(",",$set_values);
+		$query = "UPDATE {$this->table} SET {$fields} {$condition}";
 		$this->pdo = DataBase::connect();
-		$stmt = $this->pdo->prepare($query);
-		$result = $stmt->execute($request);
-		DataBase::disconnect();
-		return $result;
-	}
-
-	public function updateWhere($set,$request,$where)
-	{
-		$query = "UPDATE {$this->table} SET {$set} WHERE $where = ?";
-		$this->pdo = DataBase::connect();
-		$stmt = $this->pdo->prepare($query);
-		$result = $stmt->execute($request);
+		$stmt = $this->pdo->prepare($query);		
+		$result = $stmt->execute($get_values);
 		DataBase::disconnect();
 		return $result;
 	}
