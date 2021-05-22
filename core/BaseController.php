@@ -11,7 +11,7 @@ abstract class BaseController
 
 	public function __construct()
 	{
-		$this->view = new \stdClass;
+		$this->view = new \stdClass;		
 	}
 
 	protected function renderView($viewPath, $layoutPath = null)
@@ -59,12 +59,27 @@ abstract class BaseController
 
 	protected function request($req)
 	{
-		$method = $_SERVER['REQUEST_METHOD'];
+		$method = $_SERVER['REQUEST_METHOD'];		
 
 		if($method == $req) {
 			return true;
 		}else {
 			return false;
 		}
+	}
+
+	public function req()
+	{
+		global $_DELETE; array();
+		global $_PUT; array();
+
+		if (!strcasecmp($_SERVER['REQUEST_METHOD'], 'DELETE')) {
+			parse_str(file_get_contents('php://input'), $_DELETE);
+		}
+		if (!strcasecmp($_SERVER['REQUEST_METHOD'], 'PUT')) {
+			parse_str(file_get_contents('php://input'), $_PUT);
+		}
+
+		return ["PUT"=>$_PUT,"DELETE"=>$_DELETE];
 	}
 }

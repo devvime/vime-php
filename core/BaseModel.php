@@ -14,66 +14,27 @@ class BaseModel
 
 	public function __construct()
 	{
+		// $this->pdo = DataBase::connect();
+	}
+
+	public function select($fields, $params = "", $values = [])
+	{
+		$query = "SELECT {$fields} FROM {$this->table} {$params}";
 		$this->pdo = DataBase::connect();
-	}
-
-	public function all()
-	{
-		$query = "SELECT * FROM {$this->table}";
 		$stmt = $this->pdo->prepare($query);
-		$stmt->execute();
+		$stmt->execute($values);
 		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
 		DataBase::disconnect();
 		return $result;
 	}
 
-	public function getAll($param)
+	public function selectAssoc($fields, $params = "", $values = [])
 	{
-		$query = "SELECT * FROM {$this->table} WHERE $param";
+		$query = "SELECT {$fields} FROM {$this->table} {$params}";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
-		DataBase::disconnect();
-		return $result;
-	}
-
-	public function allAssoc()
-	{
-		$query = "SELECT * FROM {$this->table}";
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute();
+		$stmt->execute($values);
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		DataBase::disconnect();
-		return $result;
-	}
-
-	public function allOrderBy($campo)
-	{
-		$query = "SELECT * FROM {$this->table} ORDER BY $campo ASC";
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
-		DataBase::disconnect();
-		return $result;
-	}
-
-	public function allOrderByDesc($campo)
-	{
-		$query = "SELECT * FROM {$this->table} ORDER BY $campo DESC";
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
-		DataBase::disconnect();
-		return $result;
-	}
-
-	public function find($id)
-	{
-		$query = "SELECT * FROM {$this->table} WHERE id=:id";
-		$stmt = $this->pdo->prepare($query);
-		$stmt->bindParam(":id",$id);
-		$stmt->execute();
-		$result = $stmt->fetch(PDO::FETCH_OBJ);
 		DataBase::disconnect();
 		return $result;
 	}
@@ -81,6 +42,7 @@ class BaseModel
 	public function getFind($campo,$value)
 	{
 		$query = "SELECT * FROM {$this->table} WHERE {$campo} = ?";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->execute(array($value));
 		$result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -88,18 +50,10 @@ class BaseModel
 		return $result;
 	}
 
-	public function login($user,$pass)
-	{
-		$stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE email = ? AND pass = ?");
-		$stmt->execute(array($user,$pass));
-		$result = $stmt->fetch(PDO::FETCH_OBJ);		
-		DataBase::disconnect();		
-		return $result;
-	}
-
 	public function create($campos,$param,$values)
 	{
 		$query = "INSERT INTO {$this->table} ({$campos}) VALUES ({$param})";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$result = $stmt->execute($values);
 		DataBase::disconnect();
@@ -109,6 +63,7 @@ class BaseModel
 	public function update($set,$request)
 	{
 		$query = "UPDATE {$this->table} SET {$set} WHERE id = ?";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$result = $stmt->execute($request);
 		DataBase::disconnect();
@@ -118,6 +73,7 @@ class BaseModel
 	public function updateWhere($set,$request,$where)
 	{
 		$query = "UPDATE {$this->table} SET {$set} WHERE $where = ?";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$result = $stmt->execute($request);
 		DataBase::disconnect();
@@ -127,6 +83,7 @@ class BaseModel
 	public function delete($id)
 	{
 		$query = "DELETE FROM {$this->table} WHERE id=:id";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->bindValue(":id", $id);
 		$result = $stmt->execute();
@@ -246,6 +203,7 @@ class BaseModel
 			$pagina = 0 * $itens_por_pagina;
 		}		
 		$query = "SELECT * FROM {$this->table} ORDER BY {$campo} DESC LIMIT {$pagina}, {$itens_por_pagina}";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -258,6 +216,7 @@ class BaseModel
 		$itens_por_pagina = $n;
 		$pagina = intval($_GET['pagina']) * $itens_por_pagina;
 		$query = "SELECT * FROM {$this->table} WHERE {$where} = ? ORDER BY {$campo} DESC LIMIT {$pagina}, {$itens_por_pagina}";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->execute(array($value));
 		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -274,6 +233,7 @@ class BaseModel
 			$pagina = 0 * $itens_por_pagina;
 		}		
 		$query = "SELECT * FROM {$this->table} LIMIT {$pagina}, {$itens_por_pagina}";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -290,6 +250,7 @@ class BaseModel
 			$pagina = 0 * $itens_por_pagina;
 		}
 		$query = "SELECT * FROM {$this->table} WHERE {$where} = ? ORDER BY {$campo} DESC LIMIT {$pagina}, {$itens_por_pagina}";
+		$this->pdo = DataBase::connect();
 		$stmt = $this->pdo->prepare($query);
 		$stmt->execute(array($value));
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);

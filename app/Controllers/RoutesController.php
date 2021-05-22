@@ -8,13 +8,13 @@ use Core\Page;
 
 class RoutesController extends BaseController
 {
-	private $product;
+	private $user;
 	private $page;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->product = Container::getModel("Product");
+		$this->user = Container::getModel("User");
 		$pageData = ["pagetitle"=>"VIME - Micro Frmework PHP","author"=>"Victor Alves","desc"=>"Description"];
 		$this->page = new Page([],"website/",$pageData);
 	}

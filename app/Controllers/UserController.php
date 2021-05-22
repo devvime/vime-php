@@ -19,23 +19,26 @@ class UserController extends BaseController
 	public function index(){
 
         $this->request('GET') &&
-            $this->findAll();
+            $this->users();
 
 		$this->request('POST') &&
             $this->store();
 
+		$this->request('DELETE') &&
+            $this->destroy($this->req()['DELETE']['id']);
+
 	}
 
-	public function findAll()
+	public function users()
 	{
-		$users = $this->user->all();
+		$users = $this->user->select("id, name, email");
 
 		if($users) {
 			print json_encode($users);
 			http_response_code(200);
 		}else {
 			print json_encode(["error"=>"Ops, algo deu errado..."]);
-			http_response_code(200);
+			http_response_code(400);
 		}
 	}
 
@@ -43,11 +46,12 @@ class UserController extends BaseController
 
 		$key = SECRET;		
 
-		$exist_user = $this->user->getFind("email",$_POST['email']);
+		$exist_user = $this->user->select("*","WHERE email = ?",[$_POST['email']]);
 
 		if($exist_user) {
 			print json_encode(["error"=>"Esse e-mail já está cadastrado!"]);
 			http_response_code(406);
+			exit;
 		}else {
 			$set = "name, email, password, role";
 			$param = "?, ?, ?, ?";
@@ -55,7 +59,7 @@ class UserController extends BaseController
 			$values = [$_POST['name'],$_POST['email'],$password,'0'];
 
 			if($this->user->create($set, $param, $values)) {
-				print json_encode(["success"=>"Usuário cadastrado com sucesso!"]);
+				print json_encode(["success"=>"Cadastro realizado com sucesso!"]);
 				http_response_code(200);
 			}else {
 				print json_encode(["error"=>"Não foi possível efetuar o cadastro..."]);
@@ -63,6 +67,35 @@ class UserController extends BaseController
 			}
 		}
 
+	}
+
+	public function read($id)
+	{
+		$user = $this->user->select("id, name, email", "WHERE id = ?", [$id]);
+
+		if ($user) {
+			print json_encode($user);
+			http_response_code(200);
+		}else {
+			print json_encode(["error"=>"Usuário não encontrado..."]);
+			http_response_code(404);
+		}
+	}
+
+	public function destroy($id)
+	{
+		if($this->user->select("id, name, email", "WHERE id = ?",[$id])) {
+			if ($this->user->delete($id)) {
+				print json_encode(["success"=>"Usuário deletado com sucesso!"]);
+				http_response_code(200);
+			}else {
+				print json_encode(["error"=>"Não foi possível deletar o usuário..."]);
+				http_response_code(400);
+			}
+		}else {
+			print json_encode(["error"=>"Usuário inexistente, não foi possível deletar."]);
+			http_response_code(404);
+		}		
 	}
 
 }
