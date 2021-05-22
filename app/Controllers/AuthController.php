@@ -28,19 +28,18 @@ class AuthController extends BaseController
 	}
 
 	public function auth() {
-
 		if ($this->request('POST')) {
-			$current_user = $this->user->getFind("email",$_POST['email']);
-			if ($current_user) {			
-				$key = SECRET;			
-				$pass = JWT::encode($_POST['password'], $key);
-				if ($pass === $current_user->password) {
+			$current_user = $this->user->select("*","where email = ?",[$_POST['email']]);
+			$user = $current_user[0];
+			if ($user) {			
+				$pass = JWT::encode($_POST['password'], SECRET);
+				if ($pass === $user->password) {
 					$user_data = [
-						"id"=>$current_user->id,
-						"name"=>$current_user->name,
-						"email"=>$current_user->email
+						"id"=>$user->id,
+						"name"=>$user->name,
+						"email"=>$user->email
 					];
-					$user_cokie = JWT::encode($user_data, $key);
+					$user_cokie = JWT::encode($user_data, SECRET);
 					print json_encode(["token"=>$user_cokie]);
 				}else {
 					print json_encode(["error"=>"Senha incorreta!"]);
@@ -55,5 +54,4 @@ class AuthController extends BaseController
 			http_response_code(401);
 		}
 	}
-
 }
