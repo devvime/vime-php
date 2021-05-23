@@ -21,7 +21,7 @@ class RoutesController extends BaseController
 
 	public function index(){
 
-		$this->page->setView("index",[
+		$this->page->render("index",[
 			"title"=>"VIME PHP",
 			"subtitle"=>"Micro Framework PHP (Simple Router)",
 			"content"=>"By: Victor Alves Mendes"

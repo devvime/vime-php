@@ -20,11 +20,10 @@ class Email
         $this->mail->Charset = "utf-8";
         $this->mail->SMTPAuth   = true;
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-
-        $this->mail->Host       = "smtp.host.com.br";
-        $this->mail->Username   = 'user@email.com.br';
-        $this->mail->Password   = 'password';
-        $this->mail->Port       = 587;
+        $this->mail->Host       = EMAIL_HOST;
+        $this->mail->Username   = EMAIL_USER;
+        $this->mail->Password   = EMAIL_PASSWORD;
+        $this->mail->Port       = EMAIL_PORT;
     }
 
     public function set($email,$name)

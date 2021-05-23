@@ -23,17 +23,6 @@ class BaseModel
 		return $result;
 	}
 
-	public function selectAssoc($fields, $params = "", $values = [])
-	{
-		$query = "SELECT {$fields} FROM {$this->table} {$params}";
-		$this->pdo = DataBase::connect();
-		$stmt = $this->pdo->prepare($query);
-		$stmt->execute($values);
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		DataBase::disconnect();
-		return $result;
-	}
-
 	public function create($campos,$param,$values)
 	{
 		$query = "INSERT INTO {$this->table} ({$campos}) VALUES ({$param})";

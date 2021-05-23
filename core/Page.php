@@ -32,7 +32,7 @@ class Page {
 
         $this->setData($this->options["data"]);
 
-        if ($this->options["header"] === true) $this->setView("header",$header);
+        if ($this->options["header"] === true) $this->render("header",$header);
     }
 
     private function setData($data = array())
@@ -42,7 +42,7 @@ class Page {
         }
     }
 
-    public function setView($name, $data = array(), $retunrHTML = false)
+    public function render($name, $data = array(), $retunrHTML = false)
     {
         $this->setData($data);
 
