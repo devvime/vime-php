@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Firebase\JWT\JWT;
+
 abstract class BaseController
 {
 	protected $view;
@@ -116,7 +118,59 @@ abstract class BaseController
 		$success = file_put_contents($file, $data);
 		print $success ? $file : 'Unable to save the file.';
 		return $file;
-	}	
+	}
+	
+	public function getAuthorizationHeader(){
+        $headers = null;
+        if (isset($_SERVER['Authorization'])) {
+            $headers = trim($_SERVER["Authorization"]);
+        }
+        else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
+            $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+        } elseif (function_exists('apache_request_headers')) {
+            $requestHeaders = apache_request_headers();
+            // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
+            $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
+            //print_r($requestHeaders);
+            if (isset($requestHeaders['Authorization'])) {
+                $headers = trim($requestHeaders['Authorization']);
+            }
+        }
+        return $headers;
+    }
+
+	public function getBearerToken() 
+	{
+		$headers = $this->getAuthorizationHeader();
+		if (!empty($headers)) {
+			if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+				return $matches[1];
+			}
+		}
+		return null;
+	}
+
+	public function verifyAuthToken()
+	{
+		if ($this->getBearerToken()) {
+			try {
+				$token = JWT::decode($this->getBearerToken(), SECRET, array('HS256'));
+			} catch (\Throwable $th) {
+				$token = false;
+			}
+			if ($token) {
+				return $token;
+			}else {
+				print json_encode(["error"=>"Token de autorização inválido!"]);
+				http_response_code(401);
+				exit;
+			}			
+		}else {
+			print json_encode(["error"=>"Você não está logado!"]);
+			http_response_code(401);
+			exit;
+		}
+	}
 
 	public function timezone()
 	{

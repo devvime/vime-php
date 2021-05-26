@@ -41,6 +41,7 @@ class AuthController extends BaseController
 					];
 					$user_cokie = JWT::encode($user_data, SECRET);
 					print json_encode(["token"=>$user_cokie]);
+					http_response_code(200);
 				}else {
 					print json_encode(["error"=>"Senha incorreta!"]);
 					http_response_code(403);

@@ -33,6 +33,8 @@ class UserController extends BaseController
 
 	public function users()
 	{
+		$this->verifyAuthToken();
+
 		$users = $this->user->select("id, name, email");
 		if($users) {
 			print json_encode($users);
