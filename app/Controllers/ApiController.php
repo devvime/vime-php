@@ -7,28 +7,32 @@ use Core\Container;
 
 class ApiController extends BaseController
 {
-	private $product;
+	private $user;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->product = Container::getModel("Product");
+		$this->user = Container::getModel("User");
 	}
 
-	public function index(){
+	public function index()
+	{
+        print("GET");
+	}
 
-        $this->request('GET') &&
-            print("GET");
+	public function store()
+	{
+		print("POST");
+	}
 
-		$this->request('POST') &&
-            print("POST");
+	public function update()
+	{
+		print("PUT");
+	}
 
-		$this->request('PUT') &&
-            print("PUT");
-
-		$this->request("DELETE") &&
-            print("DELETE");
-
+	public function destroy()
+	{
+		print("DELETE");
 	}
 
 }

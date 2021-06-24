@@ -17,14 +17,8 @@ class AuthController extends BaseController
 	}
 
 	public function index(){
-
-        $this->request('GET') &&
-            print json_encode(["error"=>"Acesso não autorizado!"]);
-            http_response_code(406);
-        
-            $this->request('POST') &&
-                $this->auth();
-
+        print json_encode(["error"=>"Acesso não autorizado!"]);
+        http_response_code(406);
 	}
 
 	public function auth() {

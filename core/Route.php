@@ -13,8 +13,8 @@ class Route
 	}
 
 	private function setRoutes($routes)
-	{
-		foreach ($routes as $route) {
+	{		
+		foreach ($routes as $route) {		
 			$explode = explode('@', $route[1]);
 			$r = [$route[0],$explode[0],$explode[1]];
 			$newRoutes[] = $r;
