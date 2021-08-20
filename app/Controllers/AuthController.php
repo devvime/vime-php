@@ -24,7 +24,13 @@ class AuthController extends BaseController
 	public function auth() {
 		if ($this->request('POST')) {
 			$current_user = $this->user->select("*","where email = ?",[$_POST['email']]);
-			$user = $current_user[0];
+			if ($current_user) {
+				$user = $current_user[0];
+			}else {
+				print json_encode(["error"=>"Usuário não encontrato."]);
+				http_response_code(404);
+				exit;
+			}			
 			if ($user) {			
 				$pass = JWT::encode($_POST['password'], SECRET);
 				if ($pass === $user->password) {

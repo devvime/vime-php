@@ -62,10 +62,10 @@ class UserController extends BaseController
 				http_response_code(406);
 				exit;
 			}else {
-				$set = "name, email, password, role";
-				$param = "?, ?, ?, ?";
+				$set = "name, email, password, role, created_at";
+				$param = "?, ?, ?, ?, ?";
 				$password = JWT::encode($_POST['password'], SECRET);
-				$values = [$_POST['name'],$_POST['email'],$password,'0'];
+				$values = [$_POST['name'],$_POST['email'],$password,'0', date("F j, Y, g:i a")];
 
 				if($this->user->create($set, $param, $values)) {
 					print json_encode(["success"=>"Cadastro realizado com sucesso!"]);

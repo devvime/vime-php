@@ -28,7 +28,7 @@ class DataBase extends PDO
 						self::$conn =  new PDO( "mysql:host=".self::$dbHost.";"."dbname=".self::$dbName, self::$dbUser, self::$dbPass); 
 					}	                
 	            }
-	            catch(PDOException $exception)
+	            catch(\PDOException $exception)
 	            {
 	                die($exception->getMessage());
 	            }
