@@ -40,7 +40,7 @@ class EmailController extends Email {
             $this->mail->send(); // Dispara o email
             return true;
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "Falha no erro!: {$this->mail->ErrorInfo}";
         }
     }

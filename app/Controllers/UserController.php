@@ -18,21 +18,6 @@ class UserController extends BaseController
 
 	public function index()
 	{
-        $this->request('GET') &&
-            $this->users();
-
-		$this->request('POST') &&
-            $this->store();
-
-		$this->request('DELETE') &&
-            $this->destroy($this->req()['DELETE']['id']);
-			
-			$this->request('PUT') &&
-				$this->update($this->req()['PUT']);
-	}
-
-	public function users()
-	{
 		$this->verifyAuthToken();
 
 		$users = $this->user->select("id, name, email");
@@ -45,7 +30,20 @@ class UserController extends BaseController
 		}
 	}
 
-	public function store() {		
+	public function read($id)
+	{
+		$user = $this->user->select("id, name, email", "WHERE id = ?", [$id]);
+		if ($user) {
+			print json_encode($user);
+			http_response_code(200);
+		}else {
+			print json_encode(["error"=>"Usuário não encontrado..."]);
+			http_response_code(404);
+		}
+	}
+
+	public function store() 
+	{		
 		if (!isset($_POST['name'])) {
 			print json_encode(["error"=>"O Campo nome é obrigatório"]);
 			http_response_code(406);
@@ -76,40 +74,7 @@ class UserController extends BaseController
 				}
 			}
 		}	
-	}
-
-	public function read($id)
-	{
-		$user = $this->user->select("id, name, email", "WHERE id = ?", [$id]);
-		if ($user) {
-			print json_encode($user);
-			http_response_code(200);
-		}else {
-			print json_encode(["error"=>"Usuário não encontrado..."]);
-			http_response_code(404);
-		}
-	}
-
-	public function destroy($id)
-	{
-		if (!isset($id)) {
-			print json_encode(["error"=>"Informe o id do usuário a ser deletado!"]);
-			http_response_code(406);
-		}else {
-			if($this->user->select("id, name, email", "WHERE id = ?",[$id])) {
-				if ($this->user->delete($id)) {
-					print json_encode(["success"=>"Usuário deletado com sucesso!"]);
-					http_response_code(200);
-				}else {
-					print json_encode(["error"=>"Não foi possível deletar o usuário..."]);
-					http_response_code(400);
-				}
-			}else {
-				print json_encode(["error"=>"Usuário inexistente, não foi possível deletar."]);
-				http_response_code(404);
-			}
-		}				
-	}
+	}		
 
 	public function update($data)
 	{
@@ -134,6 +99,27 @@ class UserController extends BaseController
 				http_response_code(404);
 			}
 		}
+	}
+
+	public function destroy($id)
+	{
+		if (!isset($id)) {
+			print json_encode(["error"=>"Informe o id do usuário a ser deletado!"]);
+			http_response_code(406);
+		}else {
+			if($this->user->select("id, name, email", "WHERE id = ?",[$id])) {
+				if ($this->user->delete($id)) {
+					print json_encode(["success"=>"Usuário deletado com sucesso!"]);
+					http_response_code(200);
+				}else {
+					print json_encode(["error"=>"Não foi possível deletar o usuário..."]);
+					http_response_code(400);
+				}
+			}else {
+				print json_encode(["error"=>"Usuário inexistente, não foi possível deletar."]);
+				http_response_code(404);
+			}
+		}				
 	}
 
 }

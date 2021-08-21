@@ -17,8 +17,10 @@ $request->method('POST') && $route[] = ['/sendmail','EmailController@index'];
 $request->method('POST') && $route[] = ['/api','ApiController@store'];
 // =====================put===========================================
 $request->method('PUT') && $route[] = ['/api','ApiController@update'];
+$request->method('PUT') && $route[] = ['/user','UserController@update'];
 // =====================delete===========================================
 $request->method('DELETE') && $route[] = ['/api','ApiController@destroy'];
+$request->method('DELETE') && $route[] = ['/user','UserController@destroy'];
 
 return $route;
 

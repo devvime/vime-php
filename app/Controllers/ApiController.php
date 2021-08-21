@@ -20,6 +20,11 @@ class ApiController extends BaseController
         print("GET");
 	}
 
+	public function read($id)
+	{
+        print($id);
+	}
+
 	public function store()
 	{
 		print("POST");

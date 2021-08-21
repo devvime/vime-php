@@ -59,32 +59,6 @@ abstract class BaseController
 		}
 	}
 
-	protected function request($req)
-	{
-		$method = $_SERVER['REQUEST_METHOD'];		
-
-		if($method == $req) {
-			return true;
-		}else {
-			return false;
-		}
-	}
-
-	public function req()
-	{
-		global $_DELETE; array();
-		global $_PUT; array();
-
-		if (!strcasecmp($_SERVER['REQUEST_METHOD'], 'DELETE')) {
-			parse_str(file_get_contents('php://input'), $_DELETE);
-		}
-		if (!strcasecmp($_SERVER['REQUEST_METHOD'], 'PUT')) {
-			parse_str(file_get_contents('php://input'), $_PUT);
-		}
-
-		return ["PUT"=>$_PUT,"DELETE"=>$_DELETE];
-	}
-
 	public function upload($img, $folder = 'files/uploads/')
 	{
 		if (isset($img['name']) && $img["error"] == 0) {
