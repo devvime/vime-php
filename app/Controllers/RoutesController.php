@@ -15,7 +15,12 @@ class RoutesController extends BaseController
 	{
 		parent::__construct();
 		$this->user = Container::getModel("User");
-		$pageData = ["pagetitle"=>"VIME - Micro Frmework PHP","author"=>"Victor Alves","desc"=>"Description"];
+		$pageData = [
+			"pagetitle"=>"VIME - Micro Frmework PHP",
+			"author"=>"Victor Alves",
+			"desc"=>"Description",
+			"cache"=>$this->cache()
+		];
 		$this->page = new Page([],"website/",$pageData);
 	}
 
@@ -24,6 +29,7 @@ class RoutesController extends BaseController
 			"title"=>"VIME PHP",
 			"subtitle"=>"Micro Framework PHP (Simple Router)",
 			"content"=>"By: Victor Alves Mendes"
+			
 		]);
 	}
 

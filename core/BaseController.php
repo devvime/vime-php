@@ -247,4 +247,8 @@ abstract class BaseController
 	{
 		header('Content-type: application/json');
 	}
+
+	public function cache() {
+		return round(microtime(true) * 1000);
+	}
 }
