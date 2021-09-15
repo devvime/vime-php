@@ -27,11 +27,10 @@ class Route
 		$obj = new \stdClass;
 
 		foreach ($_GET as $key => $value) {
-			// @$obj->get->$key = $value;
+			@$obj->get->$key = $value;
 		}
-
 		foreach ($_POST as $key => $value) {
-			// @$obj->post->$key = $value;
+			@$obj->post->$key = $value;
 		}
 
 		return @$obj;
@@ -86,6 +85,39 @@ class Route
 			}
 		}else{
 			Container::pageNotFound();
+		}
+	}
+
+	static function get()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	static function post()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	static function put()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	static function delete()
+	{
+		if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+			return true;
+		}else {
+			return false;
 		}
 	}
 }
