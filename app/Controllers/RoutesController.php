@@ -28,8 +28,7 @@ class RoutesController extends BaseController
 		$this->page->render("index",[
 			"title"=>"VIME PHP",
 			"subtitle"=>"Micro Framework PHP (Simple Router)",
-			"content"=>"By: Victor Alves Mendes"
-			
+			"content"=>"By: Victor Alves Mendes"			
 		]);
 	}
 

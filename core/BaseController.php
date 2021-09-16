@@ -251,4 +251,10 @@ abstract class BaseController
 	public function cache() {
 		return round(microtime(true) * 1000);
 	}
+
+	public function request()
+	{
+		parse_str(file_get_contents('php://input'), $data);
+		return $data;
+	}
 }

@@ -14,6 +14,7 @@ class UserController extends BaseController
 	{
 		parent::__construct();
 		$this->user = Container::getModel("User");
+		$this->timezone();
 		$this->json();
 		$this->cors();
 	}
@@ -21,38 +22,38 @@ class UserController extends BaseController
 	public function index()
 	{
 		$this->verifyAuthToken();
-
 		$users = $this->user->select("id, name, email");
 		if($users) {
 			echo json_encode($users);
-			http_response_code(200);
+			die;
 		}else {
 			echo json_encode(["error"=>"Ops, algo deu errado..."]);
-			http_response_code(400);
+			die;
 		}
 	}
 
 	public function read($id)
 	{
+		$this->verifyAuthToken();
 		$user = $this->user->select("id, name, email", "WHERE id = ?", [$id]);
 		if ($user) {
 			echo json_encode($user);
-			http_response_code(200);
+			die;
 		}else {
 			echo json_encode(["error"=>"Usuário não encontrado..."]);
-			http_response_code(404);
+			die;
 		}
 	}
 
 	public function store() 
 	{		
-		if (!isset($_POST['name'])) {
+		if (!isset($_POST['name']) || $_POST['name'] === "") {
 			echo json_encode(["error"=>"O Campo nome é obrigatório"]);			
 			die;
-		}else if (!isset($_POST['email'])) {
+		}else if (!isset($_POST['email']) || $_POST['email'] === "") {
 			echo json_encode(["error"=>"O Campo e-mail é obrigatório"]);			
 			die;
-		}else if (!isset($_POST['password'])) {
+		}else if (!isset($_POST['password']) || $_POST['password'] === "") {
 			echo json_encode(["error"=>"O Campo Senha é obrigatório"]);		
 			die;
 		} else {
@@ -77,11 +78,12 @@ class UserController extends BaseController
 		}	
 	}		
 
-	public function update($data)
+	public function update()
 	{
+		$data = $this->request();
 		if (!isset($data['id'])) {
 			echo json_encode(["error"=>"Informe o id do usuário a ser editado!"]);
-			http_response_code(406);
+			die;
 		}else {
 			$current_user = $this->user->select('*','WHERE id = ?',[$data['id']]);
 			if ($current_user) {
@@ -90,14 +92,14 @@ class UserController extends BaseController
 				}
 				if ($this->user->update("name = ?, email = ?, password = ?",$data, "WHERE id = ?", [$data['id']])) {
 					echo json_encode(["success"=>"Usuário atualizado com sucesso!"]);
-					http_response_code(200);
+					die;
 				}else {
 					echo json_encode(["error"=>"Não foi possível atualizar o usuário..."]);
-					http_response_code(400);
+					die;
 				}
 			}else {
 				echo json_encode(["error"=>"Usuário solicitado não foi encontrado!"]);
-				http_response_code(404);
+				die;
 			}
 		}
 	}
@@ -106,19 +108,19 @@ class UserController extends BaseController
 	{
 		if (!isset($id)) {
 			echo json_encode(["error"=>"Informe o id do usuário a ser deletado!"]);
-			http_response_code(406);
+			die;
 		}else {
 			if($this->user->select("id, name, email", "WHERE id = ?",[$id])) {
 				if ($this->user->delete($id)) {
 					echo json_encode(["success"=>"Usuário deletado com sucesso!"]);
-					http_response_code(200);
+					die;
 				}else {
 					echo json_encode(["error"=>"Não foi possível deletar o usuário..."]);
-					http_response_code(400);
+					die;
 				}
 			}else {
 				echo json_encode(["error"=>"Usuário inexistente, não foi possível deletar."]);
-				http_response_code(404);
+				die;
 			}
 		}				
 	}
